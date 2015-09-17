@@ -8,7 +8,7 @@ set -eu
 . /usr/local/lincremental/lincremental_functions
 
 #the specific directory to store this backup in
-TRG="$TRGBASE/hourly.0"
+TRG="$TRGBASE/snapshot.0"
 
 #create TRGBASE if it does not already exist
 if [ ! -d $TRGBASE ] ; then
@@ -22,7 +22,7 @@ fi
 
 #Exit if an initial backup has already been made
 if [ -d $TRGBASE/hourly.0 ] ; then
-	echo "Initial backup folder $TRGBASE/hourly.0 already exists, exiting."
+	echo "Initial backup folder $TRGBASE/snapshot.0 already exists, exiting."
 	exit
 fi
 

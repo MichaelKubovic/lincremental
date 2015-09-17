@@ -8,26 +8,26 @@ set -eu
 . /usr/local/lincremental/lincremental_functions
 
 #the specific directory to store this backup in
-TRG="$TRGBASE/hourly.0"
+TRG="$TRGBASE/snapshot.0"
 
 if [ ! -d $TRG ] ; then
 	$ECHO "Please perform an initial backup using lincremental_initial.sh first"
 	exit 1
 fi
 
-lock "$LOCK_DIR" "hourly"
+lock "$LOCK_DIR" "snapshot"
 
 #the directory containing the previous backup that we will increment from
-LNK="$TRGBASE/hourly.1"
+LNK="$TRGBASE/snapshot.1"
 
 #Delete the oldest snapshot, if it exists
-OLDEST="$TRGBASE/hourly.$NUM_HOURLY"
+OLDEST="$TRGBASE/snapshot.$NUM_DAILY"
 if [ -d $OLDEST ] ; then
 	$RM -rfv "$OLDEST"
 fi
 
 #Shift all the other backups back by one
-shiftbackupsback "hourly" $NUM_HOURLY
+shiftbackupsback "snapshot" $NUM_DAILY
 
 #The rsync link dest option:
 LNKOPT="--link-dest=$LNK"
@@ -35,5 +35,5 @@ LNKOPT="--link-dest=$LNK"
 #the final rsync command
 $RSYNC $OPT $LNKOPT $SRC $TRG
 
-#Update the mtime of hourly.0 to reflect the snapshot time
+#Update the mtime of snapshot.0 to reflect the snapshot time
 $TOUCH $TRG
